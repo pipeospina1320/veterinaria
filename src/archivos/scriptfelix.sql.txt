@@ -1,0 +1,243 @@
+CREATE DATABASE bdfelix;
+USE bdfelix;
+
+
+CREATE TABLE perfil(
+id INT NOT NULL,
+nombre VARCHAR(30),
+PRIMARY KEY (id)
+);
+
+INSERT INTO perfil(id,nombre)VALUES(1,'Administrador');
+INSERT INTO perfil(id,nombre)VALUES(2,'Jefe de area');
+INSERT INTO perfil(id,nombre)VALUES(3,'Auxiliar de veterinaria');
+INSERT INTO perfil(id,nombre)VALUES(4,'Recepcionista');
+INSERT INTO perfil(id,nombre)VALUES(5,'Auxiliar administrativa');
+INSERT INTO perfil(id,nombre)VALUES(6,'Medico veterinario');
+
+CREATE TABLE usuarios(
+id INT NOT NULL AUTO_INCREMENT,
+nombreUsuario VARCHAR(30),
+clave VARCHAR(30),
+idPerfil INT,
+PRIMARY KEY (id),
+FOREIGN KEY (idPerfil) REFERENCES perfil(id)
+);
+
+INSERT INTO usuarios (nombreUsuario, clave, idPerfil) VALUES('admin','admin',1);
+INSERT INTO usuarios (nombreUsuario, clave, idPerfil) VALUES('jefe','jefe',2);
+INSERT INTO usuarios (nombreUsuario, clave, idPerfil) VALUES('aux.vete','aux',3);
+INSERT INTO usuarios (nombreUsuario, clave, idPerfil) VALUES('recepcionista','recepcionista',4);
+INSERT INTO usuarios (nombreUsuario, clave, idPerfil) VALUES('aux.admin','admin',5);
+INSERT INTO usuarios (nombreUsuario, clave, idPerfil) VALUES('veterinario','veterinario',6);
+
+
+CREATE TABLE areasLaborales(
+id INT NOT NULL AUTO_INCREMENT,
+nombre VARCHAR(100),
+PRIMARY KEY(id)
+);
+
+INSERT INTO areasLAborales(nombre) VALUES("Recursos humanos");
+INSERT INTO areasLAborales(nombre) VALUES("Hospitalización");
+INSERT INTO areasLAborales(nombre) VALUES("Quirófano");
+INSERT INTO areasLAborales(nombre) VALUES("Consultorios");
+INSERT INTO areasLAborales(nombre) VALUES("Odontología");
+INSERT INTO areasLAborales(nombre) VALUES("Rayos X");
+INSERT INTO areasLAborales(nombre) VALUES("Laboratorio");
+INSERT INTO areasLAborales(nombre) VALUES("Peluquería");
+
+
+CREATE TABLE cargos(
+id INT NOT NULL AUTO_INCREMENT,
+nombre VARCHAR(100),
+PRIMARY KEY(id)
+);
+
+INSERT INTO cargos(nombre) VALUES("Veterinario");
+INSERT INTO cargos(nombre) VALUES("Auxiliar Veterinario");
+INSERT INTO cargos(nombre) VALUES("Vendedor");
+INSERT INTO cargos(nombre) VALUES("Cuidador canino Y felino");
+INSERT INTO cargos(nombre) VALUES("Gerente");
+
+
+CREATE TABLE tipoContrato(
+id INT NOT NULL,
+nombre VARCHAR(100),
+PRIMARY KEY(id)
+);
+
+INSERT INTO tipoContrato(id,nombre) VALUES(1,"Fijo");
+INSERT INTO tipoContrato(id,nombre) VALUES(2,"Indefinido");
+INSERT INTO tipoContrato(id,nombre) VALUES(3,"Obra Labor");
+INSERT INTO tipoContrato(id,nombre) VALUES(4,"Prestacion de servicios");
+
+
+CREATE TABLE paises(
+id VARCHAR(10) NOT NULL,
+nombre VARCHAR(255),
+PRIMARY KEY(id)
+);
+INSERT INTO paises(id,nombre) VALUES("1","Colombia");
+
+
+CREATE TABLE departamentos(
+id VARCHAR(10) NOT NULL,
+nombre VARCHAR(255),
+idPais VARCHAR (10),
+PRIMARY KEY (id),
+FOREIGN KEY (idPais) REFERENCES paises(id)
+);
+INSERT INTO departamentos(id,nombre,idPais) VALUES("05","Antioquia","1");
+
+
+CREATE TABLE ciudades(
+id VARCHAR(10) NOT NULL,
+nombre VARCHAR(255),
+idDepartamento VARCHAR(10),
+PRIMARY KEY (id),
+FOREIGN KEY (idDepartamento) REFERENCES departamentos(id)
+);
+
+INSERT INTO ciudades(id,nombre,idDepartamento) VALUES('001','Medellin','05');
+
+
+CREATE TABLE nacionalidad (
+id INT NOT NULL AUTO_INCREMENT,
+nombre VARCHAR(255),
+PRIMARY KEY (id)
+);
+
+INSERT INTO nacionalidad(nombre) VALUES('Colombiano');
+
+
+CREATE TABLE tipoDocumento(
+id INT NOT NULL,
+nombre VARCHAR(255),
+abreviatura VARCHAR(10),
+PRIMARY KEY(id)
+);
+
+INSERT INTO tipoDocumento(id,nombre)VALUES(12,'Tarjeta de identidad');
+INSERT INTO tipoDocumento(id,nombre)VALUES(13,'Cédula de ciudadanía');
+INSERT INTO tipoDocumento(id,nombre)VALUES(21,'Tarjeta de extranjería');
+INSERT INTO tipoDocumento(id,nombre)VALUES(22,'Cédula de extranjería');
+INSERT INTO tipoDocumento(id,nombre)VALUES(31,'NIT');
+INSERT INTO tipoDocumento(id,nombre)VALUES(41,'Pasaporte');
+INSERT INTO tipoDocumento(id,nombre)VALUES(42,'Documento de identificación extranjero');
+INSERT INTO tipoDocumento(id,nombre)VALUES(43,'Sin identificación del exterior o para uso definido por la DIAN');
+
+
+
+CREATE TABLE tipoSangre(
+id INT NOT NULL,
+tipo VARCHAR (10),
+rh VARCHAR(10),
+PRIMARY KEY(id)
+);
+
+INSERT INTO tipoSangre(id,tipo,rh)VALUES(1,'A','+');
+INSERT INTO tipoSangre(id,tipo,rh)VALUES(2,'A','-');
+INSERT INTO tipoSangre(id,tipo,rh)VALUES(3,'B','+');
+INSERT INTO tipoSangre(id,tipo,rh)VALUES(4,'B','-');
+INSERT INTO tipoSangre(id,tipo,rh)VALUES(5,'AB','+');
+INSERT INTO tipoSangre(id,tipo,rh)VALUES(6,'AB','-');
+INSERT INTO tipoSangre(id,tipo,rh)VALUES(7,'O','+');
+INSERT INTO tipoSangre(id,tipo,rh)VALUES(8,'O','-');
+
+
+
+
+CREATE TABLE personal(
+id INT NOT NULL AUTO_INCREMENT,
+idTipoDocumento INT,
+idCiudadNacimiento VARCHAR(10),
+idTipoSangre INT,
+idNacionalidad INT,
+idAreaLaboral INT,
+idCargo INT,
+idTipoContrato INT,
+numeroDocumento VARCHAR(255),
+nombreCompleto VARCHAR(255),
+fechaNacimiento DATE,
+direccion VARCHAR(255),
+telefono VARCHAR(10),
+celular VARCHAR(10),
+email VARCHAR(255),
+fechaContratacion DATE,
+profesion VARCHAR(255),
+activo INT,
+motivo VARCHAR(255),
+PRIMARY KEY (id),
+FOREIGN KEY (idTipoDocumento) REFERENCES tipoDocumento(id),
+FOREIGN KEY (idCiudadNacimiento) REFERENCES ciudades(id),
+FOREIGN KEY (idTipoSangre) REFERENCES tipoSangre(id),
+FOREIGN KEY (idNacionalidad) REFERENCES nacionalidad(id),
+FOREIGN KEY (idAreaLaboral) REFERENCES areasLaborales(id),
+FOREIGN KEY (idCargo) REFERENCES cargos(id),
+FOREIGN KEY (idTipoContrato) REFERENCES tipoContrato(id)
+);
+
+
+CREATE TABLE otrosEstudios(
+id INT NOT NULL,
+idPersonal INT,
+tituloObtenido VARCHAR(255),
+fechaObtencion DATE,
+PRIMARY KEY(id),
+FOREIGN KEY (idPersonal) REFERENCES personal(id)
+);
+
+CREATE TABLE periodicidad(
+id INT,
+periodicidad VARCHAR(50),
+PRIMARY KEY (id)
+);
+
+INSERT INTO periodicidad(id,periodicidad)VALUES(1,"Semanal");
+INSERT INTO periodicidad(id,periodicidad)VALUES(2,"Diaria");
+INSERT INTO periodicidad(id,periodicidad)VALUES(3,"Quincenal");
+INSERT INTO periodicidad(id,periodicidad)VALUES(4,"Mensual");
+
+CREATE TABLE tareas(
+id INT NOT NULL AUTO_INCREMENT,
+nombre VARCHAR(255),
+idAreasLaborales INT,
+idPeriodicidad INT,
+hora VARCHAR(10),
+activo  INT,
+PRIMARY KEY (id),
+FOREIGN KEY (idAreasLaborales) REFERENCES areasLaborales(id),
+FOREIGN KEY (idPeriodicidad) REFERENCES periodicidad(id)
+);
+
+
+
+CREATE TABLE asignacionTareas(
+id INT NOT NULL AUTO_INCREMENT,
+idTarea INT,
+fechaAsignacion DATE,
+finalizada INT,
+idPersonal INT,
+PRIMARY KEY (id),
+FOREIGN KEY (idPersonal) REFERENCES personal(id),
+FOREIGN KEY (idTarea) REFERENCES tareas(id)
+);
+
+CREATE TABLE observaciones(
+id INT NOT NULL AUTO_INCREMENT,
+observacion VARCHAR(500),
+idTareaAsignada INT,
+PRIMARY KEY(id),
+FOREIGN KEY (idTareaAsignada) REFERENCES asignacionTareas(id)
+);
+
+CREATE TABLE horarios(
+id INT NOT NULL AUTO_INCREMENT,
+fecha DATE,
+horaDesde VARCHAR(10),
+horaHasta VARCHAR(10),
+idPersonal INT,
+PRIMARY KEY (id),
+FOREIGN KEY (idPersonal) REFERENCES personal(id)
+);
